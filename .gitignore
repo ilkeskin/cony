@@ -81,3 +81,6 @@ typings/
 
 #config
 config
+
+#package-lock
+package-lock.json

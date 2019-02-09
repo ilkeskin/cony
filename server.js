@@ -8,6 +8,10 @@ const animals = require("./routes/api/animals");
 
 const app = express();
 
+// Add middleware
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
+
 // Env variables
 const port = process.env.PORT || 5000;
 
