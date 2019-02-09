@@ -1,0 +1,32 @@
+{
+  "name": "cony",
+  "version": "1.0.0",
+  "description": "Mobile app for rabbit breeders",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilkeskin/cony.git"
+  },
+  "author": "Ilyas Keskin",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ilkeskin/cony/issues"
+  },
+  "homepage": "https://github.com/ilkeskin/cony#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "mongoose": "^5.4.10",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "validator": "^10.11.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.10"
+  }
+}
