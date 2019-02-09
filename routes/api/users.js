@@ -3,14 +3,26 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
+const passport = require("passport");
 
-// Load User model
+// Load user model
 const User = require("../../models/User");
+
+// Load input validation
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 
 // @route   GET api/users/register
 // @desc    Register a user
 // @access  Public
 router.post("/register", (req, res) => {
+  const { error, value } = validateRegisterInput(req.body);
+
+  // Check validation result
+  if (error !== null) {
+    return res.status(400).json(error.details);
+  }
+
   User.findOne({ email: req.body.email }).then(user => {
     if (user) {
       return res.status(400).json({ email: "E-Mail already exists" });
@@ -21,15 +33,13 @@ router.post("/register", (req, res) => {
         password: req.body.password
       });
 
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(newUser.password, salt, (error, hash) => {
-          if (error) throw error;
-          newUser.password = hash;
-          newUser
-            .save()
-            .then(user => res.json(user))
-            .catch(error => console.log(error));
-        });
+      bcrypt.hash(newUser.password, 10, (err, hash) => {
+        if (err) throw err;
+        newUser.password = hash;
+        newUser
+          .save()
+          .then(user => res.json(user))
+          .catch(err => console.log(err));
       });
     }
   });
@@ -39,6 +49,13 @@ router.post("/register", (req, res) => {
 // @desc    Log a user in a.k.a. returning a JSON Web Token (JWT)
 // @access  Public
 router.post("/login", (req, res) => {
+  const { error, value } = validateLoginInput(req.body);
+
+  // Check validation result
+  if (error !== null) {
+    return res.status(400).json(error.details);
+  }
+
   const email = req.body.email;
   const password = req.body.password;
 
@@ -66,5 +83,16 @@ router.post("/login", (req, res) => {
     });
   });
 });
+
+// @route   GET api/users/current
+// @desc    Return current user
+// @access  Private
+router.get(
+  "/current",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    res.json(req.user);
+  }
+);
 
 module.exports = router;

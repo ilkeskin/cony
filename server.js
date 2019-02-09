@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const passport = require("passport");
 
 // Routes
 const users = require("./routes/api/users");
@@ -11,12 +12,14 @@ const app = express();
 // Add middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(passport.initialize());
 
 // Env variables
 const port = process.env.PORT || 5000;
 
 // DB config
 const db = require("./config/keys").mongoURI;
+require("./config/passport")(passport);
 
 // Connect to MongoDB
 mongoose
