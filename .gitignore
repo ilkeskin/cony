@@ -80,7 +80,7 @@ typings/
 .dynamodb/
 
 #config
-config
+config/keys.js
 
 #package-lock
 package-lock.json

@@ -1,15 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const morgan = require("morgan");
 
 // Routes
 const users = require("./routes/api/users");
-const profile = require("./routes/api/profile");
+const profiles = require("./routes/api/profiles");
 const animals = require("./routes/api/animals");
 
 const app = express();
 
 // Add middleware
+app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(passport.initialize());
@@ -31,7 +33,7 @@ app.get("/", (req, res) => res.send("Hello"));
 
 // Use Routes
 app.use("/api/users", users);
-app.use("/api/profile", profile);
+app.use("/api/profiles", profiles);
 app.use("/api/animals", animals);
 
 app.listen(port, () => console.log(`Listening on port ${port}...`));
