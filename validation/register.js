@@ -19,12 +19,16 @@ const schema = Joi.object().keys({
     .required(),
   email: Joi.string()
     // must have two domain parts e.g. example.com
-    .email({ minDomainAtoms: 2 })
+    .email({
+      minDomainAtoms: 2
+    })
     .required(),
   password: new PasswordComplexity(complexityOptions)
 });
 
 module.exports = function validateRegisterInput(data) {
-  const result = Joi.validate(data, schema, { abortEarly: false });
+  const result = Joi.validate(data, schema, {
+    abortEarly: false
+  });
   return result;
 };

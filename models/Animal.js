@@ -24,7 +24,6 @@ const AnimalSchema = new Schema({
   dateOfSlaughter: {
     type: Date
   },
-  // TODO: Schema for weight, maybe use postgres/graphite, time series data -> weight: {},
   father: {
     type: Schema.Types.ObjectId,
     ref: "animal"
