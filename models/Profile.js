@@ -36,7 +36,7 @@ const ProfileSchema = new Schema({
     twitter: String,
     instagram: String
   },
-  date: {
+  creationDate: {
     type: Date,
     default: Date.now
   }
