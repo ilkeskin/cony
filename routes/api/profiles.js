@@ -11,7 +11,7 @@ const User = require("../../models/User");
 const validateProfileInput = require("../../validation/profiles");
 
 // @route   GET api/profiles
-// @desc    Get current users profile
+// @desc    Get all profiles
 // @access  Private
 router.get(
   "/",

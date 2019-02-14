@@ -79,8 +79,8 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
-#config
+# config
 config/keys.js
 
-#package-lock
+# package-lock
 package-lock.json

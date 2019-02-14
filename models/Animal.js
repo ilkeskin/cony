@@ -7,7 +7,7 @@ const AnimalSchema = new Schema({
   },
   sex: {
     type: String,
-    enum: ['0,1', '1,0']
+    enum: ["0,1", "1,0"]
   },
   race: {
     type: String
@@ -37,7 +37,7 @@ const AnimalSchema = new Schema({
       type: String
     },
     left: {
-      type: String
+      type: Number
     }
   },
   creationDate: {
