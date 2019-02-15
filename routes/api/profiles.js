@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
 const passport = require("passport");
 
 // Load models
@@ -8,7 +7,7 @@ const Profile = require("../../models/Profile");
 const User = require("../../models/User");
 
 // Load input validation
-const validateProfileInput = require("../../validation/profiles");
+const validateProfileInput = require("../../validation/profile");
 
 // @route   GET api/profiles
 // @desc    Get all profiles
@@ -160,7 +159,7 @@ router.put(
       res
         .status(403)
         .json({
-          messgae: "Cannot update the profile of another user"
+          message: "Cannot update the profile of another user"
         });
     }
   }

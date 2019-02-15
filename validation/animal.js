@@ -14,19 +14,28 @@ const tattoo = Joi.object().keys({
 });
 
 const schema = Joi.object().keys({
-  name: Joi.string().min(3).max(30).required(),
-  sex: Joi.string().valid("0,1", "1,0").required(),
-  race: Joi.string().min(3).max(50),
-  color: Joi.string().min(3).max(50),
+  name: Joi.string().trim().min(3).max(30),
+  sex: Joi.string().trim().valid("0,1", "1,0"),
+  race: Joi.string().trim().min(3).max(50),
+  color: Joi.string().trim().min(3).max(50),
   dateOfBirth: Joi.date().max(Joi.ref("dateOfDeath")),
   dateOfDeath: Joi.date().min(Joi.ref("dateOfBirth")),
   dateOfSlaughter: Joi.date().min(Joi.ref("dateOfDeath")),
   tattoo,
 });
 
-module.exports = function validateAnimalInput(data) {
-  const result = Joi.validate(data, schema, {
-    abortEarly: false
-  });
+const onAnimalCreationSchema = schema.requiredKeys("name", "sex");
+
+module.exports = function validateAnimalInput(data, method) {
+  let result;
+  if (method === "POST") {
+    result = Joi.validate(data, onAnimalCreationSchema, {
+      abortEarly: false
+    });
+  } else if (method === "PUT") {
+    result = Joi.validate(data, schema, {
+      abortEarly: false
+    });
+  }
   return result;
 };
