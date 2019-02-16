@@ -24,10 +24,9 @@ const db = require("./config/keys").mongoURI;
 require("./config/passport")(passport);
 
 // Connect to MongoDB
-mongoose
-  .connect(db)
-  .then(() => console.log("Connected to MongoDB!"))
-  .catch(error => console.log(error));
+mongoose.connect(db)
+    .then(() => console.log("Connected to MongoDB!"))
+    .catch(error => console.log(error));
 
 app.get("/", (req, res) => res.send("Hello"));
 

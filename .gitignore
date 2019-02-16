@@ -84,3 +84,6 @@ config/keys.js
 
 # package-lock
 package-lock.json
+
+# beautify config
+.jsbeautifyrc
