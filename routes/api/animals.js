@@ -57,25 +57,39 @@ router.get("/:animal_id", (req, res) => {
 // @access  Private
 router.get("/:animal_id/weight", passport.authenticate("jwt", { session: false }), (req, res) => {
     // Filter weight data by date
-    if (req.query) {
+    if (req.query.from && req.query.to) {
         from = (req.query.from) ? new Date(req.query.from) : new Date();
         to = (req.query.to) ? new Date(req.query.to) : new Date();
+
+        Weight.find({
+                animal: req.params.animal_id,
+                timestamp_month: {
+                    $gte: from.toISOString(),
+                    $lte: to.toISOString()
+                }
+            })
+            .then(weights => {
+                if (!weights) {
+                    res.status(404).json({ message: "There is no weight data for the animal with the given ID" });
+                } else {
+                    res.json(weights);
+                }
+            })
+            .catch(err => res.status(500).json(err));
+    } else {
+        Weight.find({ animal: req.params.animal_id })
+            .then(weights => {
+                if (!weights) {
+                    res.status(404).json({ message: "There is no weight data for the animal with the given ID" });
+                } else {
+                    res.json(weights);
+                }
+
+            })
+            .catch(err => res.status(500).json(err));
     }
 
-    Weight.find({
-            animal: req.params.animal_id,
-            timestamp_month: {
-                $gte: from.toISOString(),
-                $lte: to.toISOString()
-            }
-        })
-        .then(weights => {
-            if (!weights) {
-                res.status(404).json({ message: "There is no weight data for the animal with the given ID" });
-            }
-            res.json(weights);
-        })
-        .catch(err => res.status(500).json(err));
+
 });
 
 // @route   POST api/animals
@@ -116,15 +130,46 @@ router.post("/:animal_id/weight", passport.authenticate("jwt", { session: false 
         return res.status(400).json(error.details);
     }
 
+    // Parse date from body
+    date = new Date(req.body.timestamp);
+    timestamp_month = new Date(date.getFullYear(), date.getMonth(), 1);
+
     // Parse fields from body
-    Weight.findOne({ animal: req.params.animal_id, timestamp_month: req.params.timestamp_month }, { new: true })
+    Weight.findOne({ animal: req.params.animal_id, timestamp_month })
         .then(weight => {
             if (weight) {
-                // TODO: Update days arrays w/o overriding existing values
-                //        overthink how request body should be structured
-                res.json(weight);
+                console.log("Tuple for month " + date.getMonth() + " already exists");
+                Weight.findOne({ 'days.index': date.getDate() })
+                    .then(weightWithDate => {
+                        if (weightWithDate) {
+                            console.log("Found tuple with date index of: " + date.getDate());
+                            // Array not guaranteed to be sorted
+                            dayIndex = weightWithDate.days.findIndex(day => day.index === date.getDate());
+                            weightWithDate.days[dayIndex].weight = req.body.weight;
+                            weightWithDate.save()
+                                .then(res.json(weightWithDate))
+                                .catch(err => res.json(err));
+                        } else {
+                            console.log("No tuple with date index of: " + date.getDate() + ", pushing weight");
+                            weight.days.push({
+                                index: date.getDate(),
+                                weight: req.body.weight
+                            });
+                            weight.save()
+                                .then(weight => res.json(weight));
+                        }
+                    });
             } else {
-                new Weight(req.body).save().then(weight => res.json(weight));
+                const newWeight = new Weight({
+                    animal: req.params.animal_id,
+                    timestamp_month,
+                });
+                newWeight.days.push({
+                    index: date.getDate(),
+                    weight: req.body.weight
+                });
+                newWeight.save()
+                    .then(weight => res.json(weight));
             }
         });
 });

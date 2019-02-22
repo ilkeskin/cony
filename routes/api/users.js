@@ -36,8 +36,7 @@ router.post("/register", (req, res) => {
             bcrypt.hash(newUser.password, 10, (err, hash) => {
                 if (err) throw err;
                 newUser.password = hash;
-                newUser
-                    .save()
+                newUser.save()
                     .then(user => res.json(user))
                     .catch(err => console.log(err));
             });
