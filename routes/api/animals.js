@@ -5,10 +5,12 @@ const passport = require("passport");
 // Load models
 const Animal = require("../../models/Animal");
 const Weight = require("../../models/Weight");
+const Litter = require("../../models/Litter");
 
 // Load input validation
 const validateAnimalInput = require("../../validation/animal");
 const validateWeightInput = require("../../validation/weight");
+const validateLitterInput = require("../../validation/litter");
 
 // @route   GET api/animals
 // @desc    Get all animals
@@ -58,14 +60,19 @@ router.get("/:animal_id", (req, res) => {
 router.get("/:animal_id/weight", passport.authenticate("jwt", { session: false }), (req, res) => {
     // Filter weight data by date
     if (req.query.from && req.query.to) {
-        from = (req.query.from) ? new Date(req.query.from) : new Date();
-        to = (req.query.to) ? new Date(req.query.to) : new Date();
+        from = (req.query.from) ? new Date(parseInt(req.query.from)) : new Date();
+        to = (req.query.to) ? new Date(parseInt(req.query.to)) : new Date();
+        month_from = new Date(from.getFullYear(), from.getMonth(), 1);
+        month_to = new Date(to.getFullYear(), to.getMonth(), 1);
+
+        // TODO: Date based filtering needs to be reworked: user should be able 
+        // to define range on day depth not only by month timestamp
 
         Weight.find({
                 animal: req.params.animal_id,
                 timestamp_month: {
-                    $gte: from.toISOString(),
-                    $lte: to.toISOString()
+                    $gte: month_from.toISOString(),
+                    $lte: month_to.toISOString()
                 }
             })
             .then(weights => {
@@ -88,8 +95,6 @@ router.get("/:animal_id/weight", passport.authenticate("jwt", { session: false }
             })
             .catch(err => res.status(500).json(err));
     }
-
-
 });
 
 // @route   POST api/animals
@@ -116,7 +121,8 @@ router.post("/", passport.authenticate("jwt", { session: false }), (req, res) =>
                 // Save the animal
                 new Animal(animalFields).save().then(animal => res.json(animal));
             }
-        });
+        })
+        .catch(err => res.status(500).json(err));
 });
 
 // @route   POST api/animals/:animal_id/weight
@@ -171,7 +177,62 @@ router.post("/:animal_id/weight", passport.authenticate("jwt", { session: false 
                 newWeight.save()
                     .then(weight => res.json(weight));
             }
-        });
+        })
+        .catch(err => res.status(500).json(err));
+});
+
+// @route   POST api/animals/:animal_id/litters
+// @desc    Create litter entry for animal
+// @access  Private
+router.post("/:animal_id/litters", passport.authenticate("jwt", { session: false }), (req, res) => {
+    Animal.findOne({ animal: req.params.animal_id })
+        .then(animal => {
+            if (!animal) {
+                return res.status(404).json({ message: "There is no animal with the given ID" });
+            } else {
+                if (animal.sex !== "0,1") {
+                    return res.status(400).json({ message: "Cannot add litter for male animal" });
+                } else {
+                    const { error, value } = validateLitterInput(req.body);
+
+                    // Check validation result
+                    if (error !== null) {
+                        return res.status(400).json(error.details);
+                    }
+
+                    // TODO: Probably should check if buck is a male animal...
+                    Litter.findOne({ doe: req.params.animal_id })
+                        .then(doe => {
+                            if (doe) {
+                                doe.litter.push({
+                                    buck: req.body.buck,
+                                    dateOfMating: req.body.dateOfMating,
+                                    dateOfRemating: req.body.dateOfRemating,
+                                    dateOfKindle: req.body.dateOfKindle,
+                                    litterSize: req.body.litterSize
+                                })
+                                doe.save()
+                                    .then(doe => res.json(doe));
+                            } else {
+                                const newDoe = new Litter({
+                                    doe: req.params.animal_id,
+                                });
+                                newDoe.litter.push({
+                                    buck: req.body.buck,
+                                    dateOfMating: req.body.dateOfMating,
+                                    dateOfRemating: req.body.dateOfRemating,
+                                    dateOfKindle: req.body.dateOfKindle,
+                                    litterSize: req.body.litterSize
+                                });
+                                newDoe.save()
+                                    .then(newDoe => res.json(newDoe));
+                            }
+                        })
+
+                }
+            }
+        })
+        .catch(err => res.status(500).json(err));
 });
 
 // @route   PUT api/animals/:animal_id
@@ -193,7 +254,8 @@ router.put("/:animal_id", passport.authenticate("jwt", { session: false }), (req
             } else {
                 res.status(404).json({ message: "This animal does not exist" });
             }
-        });
+        })
+        .catch(err => res.status(500).json(err));
 });
 
 module.exports = router;
