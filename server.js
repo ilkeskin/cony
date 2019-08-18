@@ -12,8 +12,7 @@ const app = express();
 
 // Add middleware
 app.use(morgan("dev"));
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.json({ extended: false }));
 app.use(passport.initialize());
 
 // Env variables
@@ -21,8 +20,6 @@ const port = process.env.PORT || 5000;
 
 // Connect to DB
 connectDB();
-
-app.get("/", (req, res) => res.send("Hello"));
 
 // Use Routes
 app.use("/api/users", users);
