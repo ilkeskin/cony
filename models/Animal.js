@@ -29,7 +29,10 @@ const AnimalSchema = new Schema({
         left: Number
     },
 }, {
-    timestamps: { createdAt: true, updatedAt: false }
+    timestamps: {
+        createdAt: true,
+        updatedAt: true
+    }
 });
 
 module.exports = Animal = mongoose.model("animal", AnimalSchema);

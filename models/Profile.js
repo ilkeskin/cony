@@ -37,7 +37,10 @@ const ProfileSchema = new Schema({
         instagram: String
     }
 }, {
-    timestamps: { createdAt: true, updatedAt: false }
+    timestamps: {
+        createdAt: true,
+        updatedAt: true
+    }
 });
 
 module.exports = Profile = mongoose.model("profile", ProfileSchema);
