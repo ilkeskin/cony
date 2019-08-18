@@ -28,13 +28,13 @@ An app to simplify the breeding of rabbits by relieving the breeder of administr
 Cony uses the MERN stack:
 
 * [MongoDB](https://www.mongodb.com/de) - a cross-platform document-oriented database program
-* [Express] - fast node.js network app framework [@tjholowaychuk]
+* [Express] - fast node.js network app framework
 * [React](https://reactjs.org/) - a JavaScript library for building user interfaces
 * [node.js] - evented I/O for the backend
 
 ### Installation
 
-*follows as soon as Cony reached production state*
+*follows as soon as Cony reaches production state*
 
 ### Todos
 
@@ -48,5 +48,4 @@ MIT
 
 [//]: #
    [node.js]: <http://nodejs.org>
-   [@tjholowaychuk]: <http://twitter.com/tjholowaychuk>
    [express]: <http://expressjs.com>
