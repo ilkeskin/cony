@@ -19,6 +19,7 @@
   "homepage": "https://github.com/ilkeskin/cony#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "config": "^3.2.2",
     "eslint-plugin-react": "^7.14.3",
     "express": "^4.17.1",
     "joi": "^14.3.1",
@@ -27,12 +28,13 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.6.6",
     "mongoose-double": "0.0.1",
-    "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
+    "concurrently": "^4.1.2",
     "eslint": "^5.16.0",
+    "morgan": "^1.9.1",
     "nodemon": "^1.19.1"
   }
 }
