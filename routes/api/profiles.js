@@ -88,28 +88,51 @@ router.post("/", passport.authenticate("jwt", { session: false }), (req, res) =>
 // @route   PUT api/profiles/user/:user_id
 // @desc    Modify profile for current user
 // @access  Private
-router.put("/user/:user_id", passport.authenticate("jwt", { session: false }), (req, res) => {
-    if (req.user.id === req.params.user_id) {
-        const { error, value } = validateProfileInput(req.body, req.method);
+// router.put("/user/:user_id", passport.authenticate("jwt", { session: false }), (req, res) => {
+//     if (req.user.id === req.params.user_id) {
+//         const { error, value } = validateProfileInput(req.body, req.method);
 
-        // Check validation result
-        if (error !== null) {
-            return res.status(400).json(error.details);
-        }
+//         // Check validation result
+//         if (error !== null) {
+//             return res.status(400).json(error.details);
+//         }
 
-        const profileFields = parseProfileFromBody(req);
-        Profile.findOneAndUpdate(req.params.user_id, profileFields, { new: true })
-            .then(profile => {
-                if (profile) {
-                    res.json(profile);
-                } else {
-                    res.status(404).json({ message: "The profile for this user does not exist" });
-                }
-            });
-    } else {
-        res.status(403).json({ message: "Cannot update the profile of another user" });
+//         const profileFields = parseProfileFromBody(req);
+//         Profile.findOneAndUpdate(req.params.user_id, profileFields, { new: true })
+//             .then(profile => {
+//                 if (profile) {
+//                     res.json(profile);
+//                 } else {
+//                     res.status(404).json({ message: "The profile for this user does not exist" });
+//                 }
+//             });
+//     } else {
+//         res.status(403).json({ message: "Cannot update the profile of another user" });
+//     }
+// });
+
+// @route   PUT api/profiles
+// @desc    Modify profile for current user
+// @access  Private
+router.put("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+    const { error, value } = validateProfileInput(req.body, req.method);
+
+    // Check validation result
+    if (error !== null) {
+        return res.status(400).json(error.details);
     }
+
+    const profileFields = parseProfileFromBody(req);
+    Profile.findOneAndUpdate(req.user.id, profileFields, { new: true })
+        .then(profile => {
+            if (profile) {
+                res.json(profile);
+            } else {
+                res.status(404).json({ message: "The profile for this user does not exist" });
+            }
+        });
 });
+
 
 function parseProfileFromBody(req) {
     const profileFields = {};
@@ -120,14 +143,14 @@ function parseProfileFromBody(req) {
     if (req.body.country) profileFields.country = req.body.country;
     if (req.body.club) profileFields.club = req.body.club;
 
-    if (req.body.adress) {
-        profileFields.adress = {};
-        if (req.body.adress.street)
-            profileFields.adress.street = req.body.adress.street;
-        if (req.body.adress.city) profileFields.adress.city = req.body.adress.city;
-        if (req.body.adress.state)
-            profileFields.adress.state = req.body.adress.state;
-        if (req.body.adress.zip) profileFields.adress.zip = req.body.adress.zip;
+    if (req.body.address) {
+        profileFields.address = {};
+        if (req.body.address.street)
+            profileFields.address.street = req.body.address.street;
+        if (req.body.address.city) profileFields.address.city = req.body.address.city;
+        if (req.body.address.state)
+            profileFields.address.state = req.body.address.state;
+        if (req.body.address.zip) profileFields.address.zip = req.body.address.zip;
     }
 
     if (req.body.social) {
