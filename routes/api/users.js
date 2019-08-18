@@ -1,11 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../../middleware/auth");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
 // Load user model
 const User = require("../../models/User");
+const Profile = require("../../models/Profile");
 
 // Load input validation
 const validateRegisterInput = require("../../validation/register");
@@ -42,6 +44,28 @@ router.post("/register", async (req, res) => {
                 res.json({ token })
             }
         );
+    } catch (err) {
+        console.log(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
+// @route   DELETE api/users
+// @desc    Delete a user
+// @access  Private
+router.delete("/", auth, async (req, res) => {
+
+    try {
+        // TODO: Remove all the users animals 
+
+        // Remove profile
+        await Profile.findOneAndRemove({ user: req.user.id });
+
+        // Remove user
+        await User.findOneAndRemove({ _id: req.user.id });
+
+        res.json({ message: "User deleted" })
+
     } catch (err) {
         console.log(err.message);
         res.status(500).send("Server error");

@@ -121,7 +121,6 @@ router.put("/", auth, async (req, res) => {
         const profileFields = parseProfileFromBody(req);
 
         let profile = await Profile.findOneAndUpdate({ user: req.user.id }, profileFields, { new: true });
-        console.log(profile);
         if (profile) {
             res.json(profile);
         } else {
@@ -132,7 +131,6 @@ router.put("/", auth, async (req, res) => {
         res.status(500).send("Server error");
     }
 });
-
 
 function parseProfileFromBody(req) {
     const profileFields = {};
