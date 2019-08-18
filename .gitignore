@@ -81,7 +81,7 @@ typings/
 
 # config
 config/keys.js
-config/default.js
+config/default.json
 
 # package-lock
 package-lock.json
