@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
+const auth = require("../../middleware/auth");
 
 // Load models
 const Animal = require("../../models/Animal");
@@ -15,7 +15,7 @@ const validateLitterInput = require("../../validation/litter");
 // @route   GET api/animals
 // @desc    Get all animals
 // @access  Private
-router.get("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get("/", auth, (req, res) => {
     Animal.find()
         .then(animals => {
             if (!animals) {
@@ -57,7 +57,7 @@ router.get("/:animal_id", (req, res) => {
 // @route   GET api/animals/:animal_id/weight[?from=<date>&to=<date>]
 // @desc    Get weight data for a specific animal
 // @access  Private
-router.get("/:animal_id/weight", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get("/:animal_id/weight", auth, (req, res) => {
     // Filter weight data by date
     if (req.query.from && req.query.to) {
         from = (req.query.from) ? new Date(parseInt(req.query.from)) : new Date();
@@ -100,7 +100,7 @@ router.get("/:animal_id/weight", passport.authenticate("jwt", { session: false }
 // @route   POST api/animals
 // @desc    Create animal
 // @access  Private
-router.post("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post("/", auth, (req, res) => {
     const { error, value } = validateAnimalInput(req.body, req.method);
 
     // Check validation result
@@ -128,7 +128,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), (req, res) =>
 // @route   POST api/animals/:animal_id/weight
 // @desc    Create weight entry for animal
 // @access  Private
-router.post("/:animal_id/weight", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post("/:animal_id/weight", auth, (req, res) => {
     const { error, value } = validateWeightInput(req.body);
 
     // Check validation result
@@ -184,7 +184,7 @@ router.post("/:animal_id/weight", passport.authenticate("jwt", { session: false 
 // @route   POST api/animals/:animal_id/litters
 // @desc    Create litter entry for animal
 // @access  Private
-router.post("/:animal_id/litters", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post("/:animal_id/litters", auth, (req, res) => {
     Animal.findOne({ animal: req.params.animal_id })
         .then(animal => {
             if (!animal) {
@@ -238,7 +238,7 @@ router.post("/:animal_id/litters", passport.authenticate("jwt", { session: false
 // @route   PUT api/animals/:animal_id
 // @desc    Modify animal
 // @access  Private
-router.put("/:animal_id", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.put("/:animal_id", auth, (req, res) => {
     const { error, value } = validateAnimalInput(req.body, req.method);
 
     // Check validation result

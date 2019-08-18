@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const passport = require("passport");
+const auth = require("../../middleware/auth");
 
 // Load models
 const Profile = require("../../models/Profile");
@@ -12,7 +12,7 @@ const validateProfileInput = require("../../validation/profile");
 // @route   GET api/profiles
 // @desc    Get all profiles
 // @access  Private
-router.get("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.get("/", auth, (req, res) => {
     Profile.find()
         .populate("user", "name")
         .then(profiles => {
@@ -57,7 +57,7 @@ router.get("/user/:user_id", (req, res) => {
 // @route   POST api/profiles
 // @desc    Create profile for current user
 // @access  Private
-router.post("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.post("/", auth, (req, res) => {
     const { error, value } = validateProfileInput(req.body, req.method);
 
     // Check validation result
@@ -88,7 +88,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), (req, res) =>
 // @route   PUT api/profiles/user/:user_id
 // @desc    Modify profile for current user
 // @access  Private
-// router.put("/user/:user_id", passport.authenticate("jwt", { session: false }), (req, res) => {
+// router.put("/user/:user_id", auth, (req, res) => {
 //     if (req.user.id === req.params.user_id) {
 //         const { error, value } = validateProfileInput(req.body, req.method);
 
@@ -114,7 +114,7 @@ router.post("/", passport.authenticate("jwt", { session: false }), (req, res) =>
 // @route   PUT api/profiles
 // @desc    Modify profile for current user
 // @access  Private
-router.put("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+router.put("/", auth, (req, res) => {
     const { error, value } = validateProfileInput(req.body, req.method);
 
     // Check validation result
