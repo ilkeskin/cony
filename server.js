@@ -1,5 +1,5 @@
 const express = require("express");
-const mongoose = require("mongoose");
+const connectDB = require("./config/db");
 const passport = require("passport");
 const morgan = require("morgan");
 
@@ -19,19 +19,8 @@ app.use(passport.initialize());
 // Env variables
 const port = process.env.PORT || 5000;
 
-// DB config
-const db = require("./config/keys").mongoURI;
-require("./config/passport")(passport);
-
-// Connect to MongoDB
-mongoose.connect(
-        db, {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useFindAndModify: false
-        })
-    .then(() => console.log("Connected to MongoDB!"))
-    .catch(error => console.log(error));
+// Connect to DB
+connectDB();
 
 app.get("/", (req, res) => res.send("Hello"));
 
