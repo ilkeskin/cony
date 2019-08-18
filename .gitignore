@@ -83,8 +83,5 @@ typings/
 config/keys.js
 config/default.json
 
-# package-lock
-package-lock.json
-
 # beautify config
 .jsbeautifyrc
