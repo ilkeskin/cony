@@ -12,7 +12,7 @@ const User = require("../../models/User");
 const validateRegisterInput = require("../../validation/register");
 const validateLoginInput = require("../../validation/login");
 
-// @route   GET api/users/register
+// @route   POST api/users/register
 // @desc    Register a user
 // @access  Public
 router.post("/register", (req, res) => {
@@ -44,7 +44,7 @@ router.post("/register", (req, res) => {
     });
 });
 
-// @route   GET api/users/login
+// @route   POST api/users/login
 // @desc    Log a user in a.k.a. returning a JSON Web Token (JWT)
 // @access  Public
 router.post("/login", (req, res) => {

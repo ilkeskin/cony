@@ -28,10 +28,8 @@ const AnimalSchema = new Schema({
         right: String,
         left: Number
     },
-    creationDate: {
-        type: Date,
-        default: Date.now
-    }
+}, {
+    timestamps: { createdAt: true, updatedAt: false }
 });
 
 module.exports = Animal = mongoose.model("animal", AnimalSchema);
