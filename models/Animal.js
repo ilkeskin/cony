@@ -13,9 +13,11 @@ const AnimalSchema = new Schema({
     },
     race: String,
     color: String,
-    dateOfBirth: Date,
+    dateOfBirth: {
+        type: Date,
+        default: Date.now
+    },
     dateOfDeath: Date,
-    dateOfSlaughter: Date,
     father: {
         type: Schema.Types.ObjectId,
         ref: "animal"
