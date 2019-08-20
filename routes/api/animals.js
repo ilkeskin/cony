@@ -127,8 +127,18 @@ router.put("/:animal_id", auth, async (req, res) => {
 // @access  Private
 router.delete("/:animal_id", auth, async (req, res) => {
     try {
-        let animal = await Animal.findByIdAndRemove(req.params.animal_id);
-        if (animal) res.json({ message: "Animal deleted" });
+        let animal = await Animal.findById(req.params.animal_id);
+
+        if (!animal) {
+            return res.status(404).json({ message: "This animal does not exist" });
+        }
+
+        if (animal.user.toString() !== req.user.id) {
+            return res.status(401).json({ message: "User not authorized" });
+        }
+
+        await animal.remove();
+        res.json({ message: "Animal deleted" });
     } catch (err) {
         if (err.kind === "ObjectId") {
             return res.status(404).json({ message: "This animal does not exist" });
