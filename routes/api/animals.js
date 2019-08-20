@@ -122,6 +122,22 @@ router.put("/:animal_id", auth, async (req, res) => {
     }
 });
 
+// @route   DELETE api/animals/:animal_id
+// @desc    Delete animal
+// @access  Private
+router.delete("/:animal_id", auth, async (req, res) => {
+    try {
+        let animal = await Animal.findByIdAndRemove(req.params.animal_id);
+        if (animal) res.json({ message: "Animal deleted" });
+    } catch (err) {
+        if (err.kind === "ObjectId") {
+            return res.status(404).json({ message: "This animal does not exist" });
+        }
+        console.log(err.message);
+        res.status(500).send("Server error");
+    }
+});
+
 // #region -- Weight routes removed for now
 // @route   GET api/animals/:animal_id/weight[?from=<date>&to=<date>]
 // @desc    Get weight data for a specific animal
