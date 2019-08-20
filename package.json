@@ -1,39 +1,41 @@
 {
-  "name": "cony",
-  "version": "1.0.0",
-  "description": "Mobile app for rabbit breeders",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ilkeskin/cony.git"
-  },
-  "author": "Ilyas Keskin",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ilkeskin/cony/issues"
-  },
-  "homepage": "https://github.com/ilkeskin/cony#readme",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "config": "^3.2.2",
-    "eslint-plugin-react": "^7.14.3",
-    "express": "^4.17.1",
-    "joi": "^14.3.1",
-    "joi-objectid": "^2.0.0",
-    "joi-password-complexity": "^2.0.1",
-    "joi-phone-number": "^2.1.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.6.6",
-    "mongoose-double": "0.0.1"
-  },
-  "devDependencies": {
-    "concurrently": "^4.1.2",
-    "eslint": "^5.16.0",
-    "morgan": "^1.9.1",
-    "nodemon": "^1.19.1"
-  }
+    "name": "cony",
+    "version": "1.0.0",
+    "description": "Mobile app for rabbit breeders",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js",
+        "server": "nodemon server.js",
+        "client": "npm start --prefix client",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ilkeskin/cony.git"
+    },
+    "author": "Ilyas Keskin",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ilkeskin/cony/issues"
+    },
+    "homepage": "https://github.com/ilkeskin/cony#readme",
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "config": "^3.2.2",
+        "eslint-plugin-react": "^7.14.3",
+        "express": "^4.17.1",
+        "joi": "^14.3.1",
+        "joi-objectid": "^2.0.0",
+        "joi-password-complexity": "^2.0.1",
+        "joi-phone-number": "^2.1.1",
+        "jsonwebtoken": "^8.5.1",
+        "mongoose": "^5.6.9",
+        "mongoose-double": "0.0.1"
+    },
+    "devDependencies": {
+        "concurrently": "^4.1.2",
+        "eslint": "^6.2.1",
+        "morgan": "^1.9.1",
+        "nodemon": "^1.19.1"
+    }
 }
