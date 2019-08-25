@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.min.css">
+    <script src="https://kit.fontawesome.com/ce160dd3f2.js"></script>
+    <title>Cony - Sign Up</title>
+</head>
+
+<body>
+    <nav class="navbar bg-dark">
+        <h1><a href="dashboard.html"><i class="fas fa-carrot"></i> Cony</a>
+</h1>
+        <ul>
+            <li><a href="profiles.html">Breeders</a></li>
+            <li><a href="register.html">Register</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+    <section class="container">
+        <h1 class="large text-primary">Sign Up</h1>
+        <p class="lead"><i class="fas fa-user-plus"></i>Create an account</p>
+        <form action="dashboard.html" class="form">
+            <div class="form-group">
+                <input class="rounded my-1" name="username" type="text" placeholder="Username" required>
+                <input class="rounded my-1" name="email" type="email" placeholder="E-Mail Address" required>
+            </div>
+            <div class="form-group">
+                <input class="rounded my-1" name="password" type="password" placeholder="Password" required>
+                <input class="rounded my-1" name="password-conf" type="password" placeholder="Confirm Password" required>
+            </div>
+            <input type="submit" value="Register" class="btn btn-primary rounded">
+            <p class="my-1">Already have an account? <a href="login.html">Sign In</a></p>
+        </form>
+    </section>
+</body>
+
+</html>
